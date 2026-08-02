@@ -1,0 +1,212 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gatekeeper",
+    "version": "0.1.0",
+    "description": "Who may read which site of this farm. Almost all of it changes farm configuration and is admin-only, which is why it keeps its own server: every route but the first reads the caller\u2019s identity, and one of them exits the process for a supervisor to restart. None of that survives a handler that never sees the request."
+  },
+  "paths": {
+    "/plugin/gatekeeper/ping.json": {
+      "get": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-read-only": true,
+        "operationId": "ping",
+        "summary": "Is the gatekeeper here",
+        "description": "The one route open to everybody, and the only one whose answer is not about configuration. A client uses it to find out whether restriction is available at all.",
+        "responses": {
+          "200": {
+            "description": "Present, and its version."
+          }
+        }
+      }
+    },
+    "/plugin/gatekeeper/status.json": {
+      "get": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-read-only": true,
+        "operationId": "status",
+        "summary": "How each site is restricted",
+        "description": "The current restriction settings for the farm. Admin only.",
+        "responses": {
+          "200": {
+            "description": "Per-site restriction settings."
+          },
+          "403": {
+            "description": "Not an admin."
+          }
+        }
+      }
+    },
+    "/plugin/gatekeeper/toggle": {
+      "post": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-writes": true,
+        "operationId": "toggle",
+        "summary": "Restrict a site, or stop restricting it",
+        "description": "Turns login-to-view on or off for one site, and writes the farm config. Admin only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "host"
+                ],
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "description": "The site being configured."
+                  },
+                  "restricted": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Written."
+          },
+          "403": {
+            "description": "Not an admin."
+          }
+        }
+      }
+    },
+    "/plugin/gatekeeper/allowed": {
+      "post": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-writes": true,
+        "operationId": "allowed",
+        "summary": "Who may read a restricted site",
+        "description": "Sets the allowed identities and domains for a site, and the splash page shown to everyone else. Admin only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "host"
+                ],
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "description": "The site being configured."
+                  },
+                  "allowed_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "allowed_domains": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "splash_page": {
+                    "type": "string"
+                  },
+                  "details": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Written."
+          },
+          "403": {
+            "description": "Not an admin."
+          }
+        }
+      }
+    },
+    "/plugin/gatekeeper/site": {
+      "post": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-writes": true,
+        "operationId": "site",
+        "summary": "Add or remove a site",
+        "description": "Creates or drops a site entry in the farm configuration. Admin only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "host",
+                  "action"
+                ],
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "description": "The site being configured."
+                  },
+                  "action": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Written."
+          },
+          "403": {
+            "description": "Not an admin."
+          }
+        }
+      }
+    },
+    "/plugin/gatekeeper/restart": {
+      "post": {
+        "x-fedwiki-served-by": "plugin",
+        "x-fedwiki-writes": true,
+        "operationId": "restart",
+        "summary": "Restart the wiki",
+        "description": "Exits the process so a supervisor restarts it, which is how configuration changes take effect. Refused unless the server is actually supervised, because otherwise it would stop the wiki and nothing would bring it back. The single clearest example of a route that can never be a farm-mounted operation.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "force": {
+                    "type": "boolean",
+                    "description": "Exit even when no supervisor is detected."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exiting."
+          },
+          "403": {
+            "description": "Not an admin."
+          },
+          "409": {
+            "description": "Not supervised, and force was not set."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "wiki-plugin-gatekeeper",
+  "version": "0.1.0",
+  "description": "Federated Wiki farm admin item: list and toggle login-to-view (restricted) sites in the farm config, edit allowed ids, add or remove sites, and restart the farm with proper back-up detection.",
+  "type": "module",
+  "main": "client/gatekeeper.js",
+  "files": [
+    "api",
+    "client",
+    "factory.json",
+    "pages",
+    "server"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "author": "David Bovill",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-gatekeeper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-gatekeeper/issues"
+  },
+  "homepage": "https://github.com/Hitchhikers-Guide-to-the-Galaxy/wiki-plugin-gatekeeper#readme",
+  "fedwiki": {
+    "api": {
+      "version": 1,
+      "spec": "api/openapi.json"
+    }
+  }
+}

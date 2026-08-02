@@ -1,0 +1,60 @@
+{
+  "title": "About Gatekeeper Plugin",
+  "story": [
+    {
+      "type": "markdown",
+      "id": "f1a2b3c4d5e60718",
+      "text": "The Gatekeeper item manages **login-to-view** across a wiki farm: it lists every site in the farm config's wikiDomains map, toggles the `restricted` flag, edits `allowed_ids`, blesses `public_pages` and a `require_terms` page for the logged-out public face, adds or removes sites, and restarts the farm so the changes take effect."
+    },
+    {
+      "type": "gatekeeper",
+      "id": "a2b3c4d5e6f70819",
+      "text": ""
+    },
+    {
+      "type": "markdown",
+      "id": "b3c4d5e6f708192a",
+      "text": "# How it works\n\nThe server side reads and writes the farm config file (the `--config` path), with a timestamped backup in `config-backups/` beside it and an atomic same-directory rename so sync clients never see a half-written file. Un-restricting **deletes** the `restricted` key, because upstream security modules check mere presence of the key.\n\nConfig changes only take effect after a farm restart (per-site servers are cached at first request), so each edited site shows a *pending restart* badge. The restart button exits the process Plugmatic-style and lets the supervisor respawn it \u2014 then polls until the server is back, proving the restart by watching the process start-time change. On an unsupervised farm (plain `wiki-start`) the exit is refused with a hint to run `wiki-start --restart` instead.\n\nAll writes require an **admin** session; the enforcement itself lives in the security modules via the shared `wiki-view-gate` module, which also serves the customisable splash screen (see the `splash_page` config key and `/assets/splash/index.html`).\n\nThe **public face** columns bless pages a logged-out visitor may read: `public_pages` serves those pages through the real client shell with a filtered sitemap, and `require_terms` names the page the splash insists on before showing its login form. Both live in the same wikiDomains entry and follow the same pending-restart flow."
+    }
+  ],
+  "journal": [
+    {
+      "type": "create",
+      "item": {
+        "title": "About Gatekeeper Plugin",
+        "story": [
+          {
+            "type": "markdown",
+            "id": "f1a2b3c4d5e60718",
+            "text": "The Gatekeeper item manages **login-to-view** across a wiki farm: it lists every site in the farm config's wikiDomains map, toggles the `restricted` flag, edits `allowed_ids`, adds or removes sites, and restarts the farm so the changes take effect."
+          }
+        ]
+      },
+      "date": 1753113600000,
+      "provenance": "from marvin"
+    },
+    {
+      "type": "edit",
+      "id": "f1a2b3c4d5e60718",
+      "item": {
+        "type": "markdown",
+        "id": "f1a2b3c4d5e60718",
+        "text": "The Gatekeeper item manages **login-to-view** across a wiki farm: it lists every site in the farm config's wikiDomains map, toggles the `restricted` flag, edits `allowed_ids`, blesses `public_pages` and a `require_terms` page for the logged-out public face, adds or removes sites, and restarts the farm so the changes take effect."
+      },
+      "date": 1785705961585,
+      "provenance": "Edited through a dialogue between David Bovill and Claude Code, session 2026-08-02: Gatekeeper public-face rework."
+    },
+    {
+      "type": "edit",
+      "id": "b3c4d5e6f708192a",
+      "item": {
+        "type": "markdown",
+        "id": "b3c4d5e6f708192a",
+        "text": "# How it works\n\nThe server side reads and writes the farm config file (the `--config` path), with a timestamped backup in `config-backups/` beside it and an atomic same-directory rename so sync clients never see a half-written file. Un-restricting **deletes** the `restricted` key, because upstream security modules check mere presence of the key.\n\nConfig changes only take effect after a farm restart (per-site servers are cached at first request), so each edited site shows a *pending restart* badge. The restart button exits the process Plugmatic-style and lets the supervisor respawn it \u2014 then polls until the server is back, proving the restart by watching the process start-time change. On an unsupervised farm (plain `wiki-start`) the exit is refused with a hint to run `wiki-start --restart` instead.\n\nAll writes require an **admin** session; the enforcement itself lives in the security modules via the shared `wiki-view-gate` module, which also serves the customisable splash screen (see the `splash_page` config key and `/assets/splash/index.html`).\n\nThe **public face** columns bless pages a logged-out visitor may read: `public_pages` serves those pages through the real client shell with a filtered sitemap, and `require_terms` names the page the splash insists on before showing its login form. Both live in the same wikiDomains entry and follow the same pending-restart flow."
+      },
+      "date": 1785705961585,
+      "provenance": "Edited through a dialogue between David Bovill and Claude Code, session 2026-08-02: Gatekeeper public-face rework."
+    }
+  ],
+  "plugin": "gatekeeper"
+}
