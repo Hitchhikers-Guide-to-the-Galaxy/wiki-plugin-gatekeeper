@@ -41,6 +41,7 @@
       "post": {
         "x-fedwiki-served-by": "plugin",
         "x-fedwiki-writes": true,
+        "x-fedwiki-private-only": true,
         "operationId": "toggle",
         "summary": "Restrict a site, or stop restricting it",
         "description": "Turns login-to-view on or off for one site, and writes the farm config. Admin only.",
@@ -80,6 +81,7 @@
       "post": {
         "x-fedwiki-served-by": "plugin",
         "x-fedwiki-writes": true,
+        "x-fedwiki-private-only": true,
         "operationId": "allowed",
         "summary": "Who may read a restricted site",
         "description": "Sets the allowed identities and domains for a site, and the splash page shown to everyone else. Admin only.",
@@ -134,6 +136,7 @@
       "post": {
         "x-fedwiki-served-by": "plugin",
         "x-fedwiki-writes": true,
+        "x-fedwiki-private-only": true,
         "operationId": "site",
         "summary": "Add or remove a site",
         "description": "Creates or drops a site entry in the farm configuration. Admin only.",
@@ -174,6 +177,7 @@
       "post": {
         "x-fedwiki-served-by": "plugin",
         "x-fedwiki-writes": true,
+        "x-fedwiki-private-only": true,
         "operationId": "restart",
         "summary": "Restart the wiki",
         "description": "Exits the process so a supervisor restarts it, which is how configuration changes take effect. Refused unless the server is actually supervised, because otherwise it would stop the wiki and nothing would bring it back. The single clearest example of a route that can never be a farm-mounted operation.",
