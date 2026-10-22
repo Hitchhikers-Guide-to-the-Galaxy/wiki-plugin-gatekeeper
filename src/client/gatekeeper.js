@@ -75,7 +75,7 @@ const bind = (div, item) => {
     if (anyPending)
       say(
         data.supervised
-          ? 'Config changed since the farm started — restart to apply.'
+          ? `Config changed since the farm started — restart to apply (${esc(data.supervisor || 'supervised')} will bring it back).`
           : 'Config changed — no supervisor detected; restart with wiki-start --restart (button will offer force).'
       )
   }

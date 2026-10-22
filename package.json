@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-gatekeeper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Federated Wiki farm admin item: list and toggle login-to-view (restricted) sites in the farm config, edit allowed ids, add or remove sites, and restart the farm with proper back-up detection.",
   "type": "module",
   "main": "client/gatekeeper.js",

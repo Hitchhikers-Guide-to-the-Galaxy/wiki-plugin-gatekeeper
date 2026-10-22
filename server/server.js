@@ -37,8 +37,19 @@ const detectIndent = raw => {
   return m ? m[1] : '  '
 }
 
-const supervised = () =>
-  fs.existsSync('/.dockerenv') || process.env.WIKI_SUPERVISED === '1'
+// A supervisor respawns the process after exit 0: a container runtime, a
+// systemd service (systemd sets INVOCATION_ID for every unit it runs; the
+// unit must carry Restart=always, as the Pi5 farms do), or an operator
+// saying so with WIKI_SUPERVISED=1. Named so the client can show which.
+const supervisor = () =>
+  process.env.WIKI_SUPERVISED === '1'
+    ? 'env'
+    : fs.existsSync('/.dockerenv')
+      ? 'docker'
+      : process.env.INVOCATION_ID
+        ? 'systemd'
+        : null
+const supervised = () => supervisor() != null
 
 const writeConfig = mutator =>
   (writeQueue = writeQueue.then(() => {
@@ -159,6 +170,7 @@ const startServer = ({ argv, app }) => {
       configMtime,
       configEditedSinceBoot: configMtime != null && configMtime > PROCESS_STARTED,
       supervised: supervised(),
+      supervisor: supervisor(),
       sites,
     })
   })
